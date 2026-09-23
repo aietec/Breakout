@@ -1,0 +1,13 @@
+{
+  "appTitle": "Breakout",
+  "modeClassic": "经典模式",
+  "modeCampaign": "活动",
+  "settings": "设置",
+  "language": "语言",
+  "highContrast": "高对比度",
+  "vibration": "震动",
+  "levelNumber": "级别 {level}",
+  "difficultyRelax": "放松",
+  "difficultyArcade": "街机",
+  "difficultyExpert": "专家"
+}

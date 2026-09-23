@@ -1,0 +1,13 @@
+{
+  "appTitle": "Breakout",
+  "modeClassic": "क्लासिक मोड",
+  "modeCampaign": "अभियान",
+  "settings": "सेटिंग्स",
+  "language": "भाषा",
+  "highContrast": "उच्च कंट्रास्ट",
+  "vibration": "कंपन",
+  "levelNumber": "स्तर {level}",
+  "difficultyRelax": "आराम",
+  "difficultyArcade": "आर्केड",
+  "difficultyExpert": "विशेषज्ञ"
+}

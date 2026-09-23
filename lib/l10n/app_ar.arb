@@ -1,0 +1,13 @@
+{
+  "appTitle": "Breakout",
+  "modeClassic": "الوضع الكلاسيكي",
+  "modeCampaign": "حملة",
+  "settings": "إعدادات",
+  "language": "لغة",
+  "highContrast": "تباين عالي",
+  "vibration": "اهتزاز",
+  "levelNumber": "مستوى {level}",
+  "difficultyRelax": "استرخاء",
+  "difficultyArcade": "ممر",
+  "difficultyExpert": "خبير"
+}

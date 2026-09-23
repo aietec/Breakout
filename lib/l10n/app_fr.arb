@@ -1,0 +1,13 @@
+{
+  "appTitle": "Breakout",
+  "modeClassic": "Mode Classique",
+  "modeCampaign": "Campagne",
+  "settings": "Paramètres",
+  "language": "Langue",
+  "highContrast": "Contraste renforcé",
+  "vibration": "Vibrations",
+  "levelNumber": "Niv {level}",
+  "difficultyRelax": "Détente",
+  "difficultyArcade": "Arcade",
+  "difficultyExpert": "Expert"
+}
