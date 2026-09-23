@@ -6,10 +6,17 @@ class GameState {
   int currentScreen = 1;
   int screenBricksDestroyed = 0;
 
-  // Per-ball states
-  int ballBricksDestroyed = 0;
-  int ballSpeedLevel = 0; // 0 (V1), 1 (V2), 2 (V3), 3 (V4)
+  // Global states for the game
+  int speedLevel = 0; // 0 (V1), 1 (V2), 2 (V3), 3 (V4)
   bool paddleShrunk = false;
+  bool hasHitRed = false;
+  
+  // Speed triggers
+  bool hit4Bricks = false;
+  bool hit12Bricks = false;
+  bool hitOrange = false;
+  bool hitRedSpeed = false;
+  int totalBricksHit = 0;
 
   final int maxScreens = 2;
   final int totalBricksPerScreen = 112; // 14 * 8
@@ -19,13 +26,19 @@ class GameState {
     lives = 3;
     currentScreen = 1;
     screenBricksDestroyed = 0;
-    resetBallState();
+    speedLevel = 0;
+    paddleShrunk = false;
+    hasHitRed = false;
+    hit4Bricks = false;
+    hit12Bricks = false;
+    hitOrange = false;
+    hitRedSpeed = false;
+    totalBricksHit = 0;
   }
 
   void resetBallState() {
-    ballBricksDestroyed = 0;
-    ballSpeedLevel = 0;
-    paddleShrunk = false;
+    // In classic rules (as per prompt), speed triggers and paddle shrink persist over the entire game.
+    // So we don't reset paddleShrunk or speedLevel here.
   }
 
   /// Returns true if a new screen should be generated.
@@ -42,21 +55,31 @@ class GameState {
         break;
       case BrickColor.orange:
         score += 5;
-        ballSpeedLevel = _max(ballSpeedLevel, 3);
+        if (!hitOrange) {
+          hitOrange = true;
+          speedLevel = _max(speedLevel, 3);
+        }
         break;
       case BrickColor.red:
         score += 7;
-        ballSpeedLevel = _max(ballSpeedLevel, 3);
+        hasHitRed = true;
+        if (!hitRedSpeed) {
+          hitRedSpeed = true;
+          speedLevel = _max(speedLevel, 3);
+        }
         break;
     }
 
-    ballBricksDestroyed++;
     screenBricksDestroyed++;
+    totalBricksHit++;
 
-    if (ballBricksDestroyed == 4) {
-      ballSpeedLevel = _max(ballSpeedLevel, 1);
-    } else if (ballBricksDestroyed == 12) {
-      ballSpeedLevel = _max(ballSpeedLevel, 2);
+    if (totalBricksHit == 4 && !hit4Bricks) {
+      hit4Bricks = true;
+      speedLevel = _max(speedLevel, 1);
+    } 
+    if (totalBricksHit == 12 && !hit12Bricks) {
+      hit12Bricks = true;
+      speedLevel = _max(speedLevel, 2);
     }
 
     if (screenBricksDestroyed >= totalBricksPerScreen) {
@@ -72,7 +95,7 @@ class GameState {
   int _max(int a, int b) => a > b ? a : b;
 
   double get speedMultiplier {
-    switch (ballSpeedLevel) {
+    switch (speedLevel) {
       case 0: return 1.0;
       case 1: return 1.15;
       case 2: return 1.30;
@@ -83,7 +106,7 @@ class GameState {
 
   /// Returns true if the paddle should shrink
   bool onTopWallHit() {
-    if (!paddleShrunk) {
+    if (hasHitRed && !paddleShrunk) {
       paddleShrunk = true;
       return true;
     }

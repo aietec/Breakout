@@ -158,6 +158,20 @@ class BreakoutGame extends FlameGame with HasCollisionDetection, DragCallbacks {
     bool nextScreen = gameState.onBrickDestroyed(brick.colorType);
     _updateUI();
 
+    // Check Classic Victory
+    if (levelData == null && gameState.currentScreen > gameState.maxScreens) {
+      ball.removeFromParent();
+      AudioManager.playSfx('level_win.wav');
+      // Save classic local high score if needed
+      final gameOverText = TextComponent(
+        text: 'VICTOIRE !\nScore Final: ${gameState.score}',
+        position: Vector2(size.x / 2, size.y / 2),
+        anchor: Anchor.center,
+      );
+      add(gameOverText);
+      return;
+    }
+
     // Update ball speed based on mode
     if (levelData != null) {
       // In campaign, balance speed via world
