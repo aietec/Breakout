@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../l10n/app_localizations.dart';
 import '../../settings/settings_manager.dart';
+import '../../audio/audio_manager.dart';
 
 class SettingsScreen extends StatelessWidget {
   final SettingsManager settingsManager;
@@ -45,6 +46,43 @@ class SettingsScreen extends StatelessWidget {
                 title: Text(loc.vibration),
                 value: settingsManager.vibration,
                 onChanged: settingsManager.setVibration,
+              ),
+              const Divider(),
+              ListenableBuilder(
+                listenable: AudioManager.instance,
+                builder: (context, _) {
+                  return Column(
+                    children: [
+                      SwitchListTile(
+                        title: const Text('Musique (BGM)'),
+                        value: AudioManager.instance.isMusicEnabled,
+                        onChanged: AudioManager.setMusicEnabled,
+                      ),
+                      Slider(
+                        value: AudioManager.instance.musicVolume,
+                        onChanged: AudioManager.instance.isMusicEnabled
+                            ? AudioManager.setMusicVolume
+                            : null,
+                      ),
+                      SwitchListTile(
+                        title: const Text('Effets Sonores (SFX)'),
+                        value: AudioManager.instance.isSfxEnabled,
+                        onChanged: AudioManager.setSfxEnabled,
+                      ),
+                      Slider(
+                        value: AudioManager.instance.sfxVolume,
+                        onChangeEnd: (val) {
+                          if (AudioManager.instance.isSfxEnabled) {
+                            AudioManager.playSfx('hit_brick.wav');
+                          }
+                        },
+                        onChanged: AudioManager.instance.isSfxEnabled
+                            ? AudioManager.setSfxVolume
+                            : null,
+                      ),
+                    ],
+                  );
+                },
               ),
             ],
           );
