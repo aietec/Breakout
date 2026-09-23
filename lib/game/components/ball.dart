@@ -59,17 +59,17 @@ class Ball extends PositionComponent with CollisionCallbacks, HasGameRef<Breakou
     if (position.x - radius < 0) {
       position.x = radius;
       velocity.x = -velocity.x;
-      AudioManager.playSfx('wall.wav');
+      AudioManager.playSfx('hit_wall.wav');
     } else if (position.x + radius > gameRef.size.x) {
       position.x = gameRef.size.x - radius;
       velocity.x = -velocity.x;
-      AudioManager.playSfx('wall.wav');
+      AudioManager.playSfx('hit_wall.wav');
     }
 
     if (position.y - radius < 0) {
       position.y = radius;
       velocity.y = -velocity.y;
-      AudioManager.playSfx('wall.wav');
+      AudioManager.playSfx('hit_wall.wav');
       gameRef.onTopWallHit();
     } else if (position.y + radius > gameRef.size.y) {
       // Bottom wall hit
@@ -85,7 +85,7 @@ class Ball extends PositionComponent with CollisionCallbacks, HasGameRef<Breakou
     super.onCollisionStart(intersectionPoints, other);
 
     if (other is Paddle) {
-      AudioManager.playSfx('paddle.wav');
+      AudioManager.playSfx('hit_paddle.wav');
       
       final paddleCenter = other.position.x;
       final ballCenter = position.x;

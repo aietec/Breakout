@@ -36,7 +36,7 @@ class BreakoutGame extends FlameGame with HasCollisionDetection, DragCallbacks {
   Future<void> onLoad() async {
     super.onLoad();
     await AudioManager.init();
-    AudioManager.playMusic('music.mp3');
+    AudioManager.playMusic('bgm.wav');
     gameState = GameState();
 
     // Paddle
@@ -135,7 +135,7 @@ class BreakoutGame extends FlameGame with HasCollisionDetection, DragCallbacks {
   }
 
   void onBrickHit(Brick brick) {
-    AudioManager.playSfx('brick_${brick.colorType.name}.wav');
+    AudioManager.playSfx('hit_brick.wav');
     brick.hit();
     
     // Check for victory condition in campaign mode
@@ -146,6 +146,7 @@ class BreakoutGame extends FlameGame with HasCollisionDetection, DragCallbacks {
           .isEmpty;
       if (noMoreBricks) {
         ball.removeFromParent(); // Stop ball
+        AudioManager.playSfx('level_win.wav');
         if (onLevelCompleted != null) {
           int stars = gameState.lives == 3 ? 3 : (gameState.lives == 2 ? 2 : 1);
           onLevelCompleted!(gameState.score, stars);
@@ -194,12 +195,12 @@ class BreakoutGame extends FlameGame with HasCollisionDetection, DragCallbacks {
     ball.removeFromParent();
 
     if (!isGameOver) {
-      AudioManager.playSfx('lose.wav');
+      AudioManager.playSfx('lose_life.wav');
       gameState.resetBallState();
       paddle.restore();
       _spawnBall();
     } else {
-      AudioManager.playSfx('lose.wav'); // Ou gameover.wav
+      AudioManager.playSfx('lose_life.wav'); 
       // Handle Game Over (e.g. Save high score, show Game Over text)
       final gameOverText = TextComponent(
         text: 'GAME OVER\nScore: ${gameState.score}',
@@ -209,6 +210,12 @@ class BreakoutGame extends FlameGame with HasCollisionDetection, DragCallbacks {
       add(gameOverText);
       // Let it sit there for the prototype. A proper restart button can be added later.
     }
+  }
+
+  @override
+  void onRemove() {
+    AudioManager.stopMusic();
+    super.onRemove();
   }
 
   void _updateUI() {
